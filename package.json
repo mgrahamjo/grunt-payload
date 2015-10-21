@@ -1,7 +1,7 @@
 {
   "name": "grunt-payload",
   "description": "Make shorthand Payload module loader syntax minification-safe.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/mgrahamjo/grunt-payload",
   "author": {
     "name": "Mike Johnson",
