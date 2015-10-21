@@ -2,9 +2,17 @@
 
 > Make shorthand [Payload](https://github.com/mgrahamjo/payload) module loader syntax minification-safe.
 
-Converts `payload(function(dependency) { } )` to `payload(['dependency'], function(dependency) { } )`
+Converts `payload(function(dependency) { } )` to `payload(['dependency'], function(dependency) { } )`.
 
-This plugin is NOT compatible with arrow functions, so include it in your build process after transpilation and before minification.
+Similar to ng-annotate, but for the Payload module loader instead of Angular.
+
+If you're using arrow functions to wrap your modules, be sure to run grunt-payload *after* your transpilation step and before minification.
+```
+// This needs to be transpiled before running grunt-payload
+payload($ => {
+  $.doSomething();
+});
+```
 
 ## Getting Started
 This plugin was built on Grunt `~0.4.5`
@@ -41,17 +49,11 @@ grunt.initConfig({
 
 ### Options
 
-#### options.singleQuotes
-Type: `Boolean`
-Default value: `true`
-
-If true, uses single quotation marks to denote strings in the output. If false, uses double quotes. This only applies to the code added by the plugin. Note that your minifier may alter quotation marks.
-
 #### options.separator
 Type: `String`
-Default value: `''`
+Default value: `'\n'`
 
-A string value that is added between concatenated files.
+A string value that is added between concatenated files. Newline is a safe choice because it prevents your code from being added to a comment line.
 
 ### Usage Examples
 
@@ -63,7 +65,7 @@ grunt.initConfig({
   payload: {
     options: {},
     files: {
-      'dist/minifcation-safe.js': ['src/app.js', 'src/folder/*.js'],
+      'dist/minification-safe.js': ['src/app.js', 'src/folder/*.js'],
     },
   },
 });
@@ -76,7 +78,6 @@ Make your Payload modules minification safe and write them to corresponding file
 grunt.initConfig({
   payload: {
     options: {
-      singleQuotes: false,
       separator: ':',
     },
     files: [{

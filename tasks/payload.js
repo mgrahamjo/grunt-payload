@@ -14,25 +14,30 @@ module.exports = function (grunt) {
 
     function annotate(src, options) {
 
-        var regex = /payload\(\s*?function\((.*?)\)/g,
+        var regex = /payload\(\s*?function\s*?\((.*?)\)/g,
             output = {},
+            matchParts,
             match,
-            q = options.singlequotes ? "'" : '"';
+            input;
 
-        while (match = regex.exec(src)) {
+        while (matchParts = regex.exec(src)) {
 
-            match = match[1];
+            input = matchParts[0];
+
+            match = matchParts[1];
 
             try {
                 var stringList = match.split(',').map(function(dep) {
-                    return q + dep.trim() + q;
+                    return '"' + dep.trim() + '"';
                 }).join(',');
 
                 src = src.replace(
-                    'payload(function(' + match + ')',
+                    input,
                     'payload([' + stringList + '],function(' + match + ')'
                 );
             } catch(err) {
+                console.log(err.stack);
+                throw err;
                 output.errors = output.errors || [];
                 output.errors.push(err);
             }
@@ -49,8 +54,7 @@ module.exports = function (grunt) {
             var filesNum = 0,
                 validRun = true,
                 options = this.options({
-                    singleQuotes: true,
-                    separator: ''
+                    separator: '\n'
                 });
 
             this.files.forEach(function (mapping) {
