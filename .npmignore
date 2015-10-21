@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+tmp
+mock
+test
+.gitignore
+.jshintrc
+Gruntfile.js
